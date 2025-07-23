@@ -1,15 +1,19 @@
 import streamlit as st
 import pyrebase
+from dotenv import load_dotenv
+import os
 
-# Firebase configuration — replace with your actual keys
+# Load secrets from .env file
+load_dotenv()
+
 firebase_config = {
-    "apiKey": "AIzaSyCJGOJ7ktI1un2B6ZWq-nLk8MY1g1qcyFs",
-    "authDomain": "help-assistant-ai-chatbot.firebaseapp.com",
-    "projectId": "help-assistant-ai-chatbot",
-    "storageBucket": "help-assistant-ai-chatbot.firebasestorage.app",
-    "messagingSenderId": "156951616597",
-    "appId": "1:156951616597:web:3acacb18c550e6676448dc",
-    "measurementId": "G-4HSE4XMZ2G",
+    "apiKey": os.getenv("FIREBASE_API_KEY"),
+    "authDomain": os.getenv("FIREBASE_AUTH_DOMAIN"),
+    "projectId": os.getenv("FIREBASE_PROJECT_ID"),
+    "storageBucket": os.getenv("FIREBASE_STORAGE_BUCKET"),
+    "messagingSenderId": os.getenv("FIREBASE_MESSAGING_SENDER_ID"),
+    "appId": os.getenv("FIREBASE_APP_ID"),
+    "measurementId": os.getenv("FIREBASE_MEASUREMENT_ID"),
     "databaseURL": ""
 }
 
@@ -18,7 +22,6 @@ auth = firebase.auth()
 
 def login():
     st.subheader("🔐 Login or Register")
-
     choice = st.radio("Select option:", ["Login", "Register", "Continue as Guest"])
 
     if choice == "Login":
@@ -48,13 +51,9 @@ def login():
         st.session_state.user = {"email": "guest@helpi.ai"}
         st.success("✅ Continuing as Guest")
 
-
 def logout():
     st.subheader("🔓 Logout")
     if st.button("Logout Now"):
         st.session_state.auth_status = False
         st.session_state.user = None
         st.success("You’ve been logged out.")
-
-def check_auth_status():
-    return st.session_state.get("auth_status", False)
